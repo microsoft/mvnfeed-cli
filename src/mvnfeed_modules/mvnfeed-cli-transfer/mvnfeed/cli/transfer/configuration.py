@@ -5,7 +5,8 @@
 
 import base64
 import getpass
-from mvnfeed.cli.common.config import REPOSITORY, AUTHORIZATION, DOWNLOAD_URL, UPLOAD_URL, repo_section_name, load_config, save_config
+
+from mvnfeed.cli.common.config import REPOSITORY, AUTHORIZATION, FEED_URL, FEED_URL, repo_section_name, load_config, save_config
 
 STAGE_DIR_CONFIGNAME = 'stage_dir'
 
@@ -34,14 +35,13 @@ def view_stagedir():
     return config.get('general', STAGE_DIR_CONFIGNAME)
 
 
-def add_repository(name, username, upload_url=None, download_url=None):
+def add_repository(name, username, feed_url=None):
     """
     Adds an external Maven repository.
 
     :param name: internal name of the repository
     :param username: name of the user for the basic authentication to the repository
-    :param upload_url: url for uploading the mvnfeed
-    :param download_url: url for downloading the mvnfeed
+    :param feed_url: url of the Maven feed
     """
     if username is None:
         raise ValueError('Username must be defined')
@@ -54,8 +54,7 @@ def add_repository(name, username, upload_url=None, download_url=None):
 
     config = load_config()
     config[repo_section_name(name)] = {
-        DOWNLOAD_URL: _default_value(download_url),
-        UPLOAD_URL: _default_value(upload_url),
+        FEED_URL: _default_value(feed_url),
         AUTHORIZATION: _default_value(authorization)
     }
     save_config(config)
@@ -81,10 +80,8 @@ def list_repositories():
         if section.startswith(REPOSITORY):
             repo = config[section]
             print(section[11:])
-            if UPLOAD_URL in repo:
-                print('  upload url  : ' + repo[UPLOAD_URL])
-            if DOWNLOAD_URL in repo and repo[DOWNLOAD_URL]:
-                print('  download url: ' + repo[DOWNLOAD_URL])
+            if FEED_URL in repo:
+                print('  feed url  : ' + repo[FEED_URL])
 
 
 def get_repository(config, name):
