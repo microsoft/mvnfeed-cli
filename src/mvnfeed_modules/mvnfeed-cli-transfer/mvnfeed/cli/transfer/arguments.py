@@ -12,8 +12,7 @@ def load_transfer_arguments(cli_command_loader):
     with knack.arguments.ArgumentsContext(cli_command_loader, 'config repo add') as ac:
         ac.argument('name', options_list=('--name'))
         ac.argument('username', options_list=('--username'))
-        ac.argument('download_url', options_list=('--download_url'))
-        ac.argument('upload_url', options_list=('--upload_url'))
+        ac.argument('url', options_list=('--url'))
 
     with knack.arguments.ArgumentsContext(cli_command_loader, 'config repo delete') as ac:
         ac.argument('name', options_list=('--name'))

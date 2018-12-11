@@ -15,7 +15,7 @@ except ImportError:
     # Python 2
     from urllib2 import Request, urlopen
 from .configuration import get_repository, get_stagedir, get_repository_shortname
-from mvnfeed.cli.common.config import AUTHORIZATION, DOWNLOAD_URL, UPLOAD_URL, load_config
+from mvnfeed.cli.common.config import AUTHORIZATION, URL, load_config
 
 
 def transfer_artifact(name, from_repo, to_repo, transfer_deps=False):
@@ -62,8 +62,8 @@ def transfer_bulk(filename, from_repo, to_repo, transfer_deps=False):
 
 
 def _transfer_single_artifact(name, from_repository, to_repository, stage_dir, transfer_deps):
-    logging.debug('download url: %s', from_repository[DOWNLOAD_URL])
-    logging.debug('upload url: %s', to_repository[UPLOAD_URL])
+    logging.debug('download url: %s', from_repository[URL])
+    logging.debug('upload url: %s', to_repository[URL])
     logging.debug('stage directory: %s', stage_dir)
 
     if not os.path.exists(stage_dir):
@@ -244,10 +244,10 @@ def _download_file(from_repository, path, filename, length=16*1024):
     if os.path.exists(filename):
         logging.debug('%s already downloaded', filename)
 
-    if not DOWNLOAD_URL in from_repository or not from_repository[DOWNLOAD_URL]:
-        raise ValueError('Repository missing download url: ' + get_repository_shortname(from_repository))
+    if not URL in from_repository or not from_repository[URL]:
+        raise ValueError('Repository missing url: ' + get_repository_shortname(from_repository))
 
-    url = from_repository[DOWNLOAD_URL] + '/' + path
+    url = from_repository[URL] + '/' + path
     logging.debug('downloading from %s', url)
     try:
         request = Request(url)
@@ -269,9 +269,9 @@ def _already_uploaded(to_repository, path):
     """
     Return True if the file was already uploaded.
     """
-    if not UPLOAD_URL in to_repository or not to_repository[UPLOAD_URL]:
-        raise ValueError('Repository missing upload url: ' + get_repository_shortname(to_repository))
-    url = to_repository[UPLOAD_URL] + '/' + path
+    if not URL in to_repository or not to_repository[URL]:
+        raise ValueError('Repository missing url: ' + get_repository_shortname(to_repository))
+    url = to_repository[URL] + '/' + path
 
     if AUTHORIZATION in to_repository and to_repository[AUTHORIZATION]:
         logging.debug('authorization header added')
@@ -298,9 +298,9 @@ def _upload_file(to_repository, path, filename):
         logging.debug('missing file to upload, skipping %s', filename)
         return False
 
-    if not UPLOAD_URL in to_repository or not to_repository[UPLOAD_URL]:
-        raise ValueError('Repository missing upload url: ' + get_repository_shortname(to_repository))
-    url = to_repository[UPLOAD_URL] + '/' + path
+    if not URL in to_repository or not to_repository[URL]:
+        raise ValueError('Repository missing url: ' + get_repository_shortname(to_repository))
+    url = to_repository[URL] + '/' + path
 
     logging.debug('uploading to ' + url)
     if AUTHORIZATION in to_repository and to_repository[AUTHORIZATION]:

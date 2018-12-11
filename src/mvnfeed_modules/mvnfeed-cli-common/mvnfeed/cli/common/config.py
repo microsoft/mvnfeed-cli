@@ -10,8 +10,7 @@ CLI_ENV_VARIABLE_PREFIX = 'MVNFEED_'
 CONFIG_FILENAME = 'mvnfeed.ini'
 
 REPOSITORY = 'repository.'
-DOWNLOAD_URL = 'download_url'
-UPLOAD_URL = 'upload_url'
+URL = 'url'
 AUTHORIZATION = 'authorization'
 
 def _get_config_dir():
@@ -36,22 +35,22 @@ def load_config():
     config = configparser.ConfigParser()
 
     config[repo_section_name('central')] = {
-        DOWNLOAD_URL: 'https://repo.maven.apache.org/maven2/'
+        URL: 'https://repo.maven.apache.org/maven2'
     }
     config[repo_section_name('jcenter')] = {
-        DOWNLOAD_URL: 'http://jcenter.bintray.com'
+        URL: 'http://jcenter.bintray.com'
     }
     config[repo_section_name('jboss')] = {
-        DOWNLOAD_URL: 'https://repository.jboss.org/nexus/content/repositories/releases/'
+        URL: 'https://repository.jboss.org/nexus/content/repositories/releases'
     }
     config[repo_section_name('clojars')] = {
-        DOWNLOAD_URL: 'https://repo.clojars.org/'
+        URL: 'https://repo.clojars.org'
     }
     config[repo_section_name('atlassian')] = {
-        DOWNLOAD_URL: 'https://packages.atlassian.com/maven/public'
+        URL: 'https://packages.atlassian.com/maven/public'
     }
     config[repo_section_name('google')] = {
-        DOWNLOAD_URL: 'https://maven.google.com/'
+        URL: 'https://maven.google.com'
     }
 
     save_config(config, filename)
