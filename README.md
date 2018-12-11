@@ -58,19 +58,19 @@ The configuration file for the _MvnFeed CLI_ is stored in the file `~/.mvnfeed/m
     ```bash
     mvnfeed config repo list
     central
-      feed url: https://repo.maven.apache.org/maven2
+      url : http://central.maven.org/maven2
     jcenter
-      feed url: http://jcenter.bintray.com
+      url : http://jcenter.bintray.com
     jboss
-      feed url: https://repository.jboss.org/nexus/content/repositories/releases
+      url : https://repository.jboss.org/nexus/content/repositories/releases
     clojars
-      feed url: https://repo.clojars.org
+      url : https://repo.clojars.org
     atlassian
-      feed url: https://packages.atlassian.com/maven/public
+      url : https://packages.atlassian.com/maven/public
     google
-      feed url: https://maven.google.com
+      url : https://maven.google.com
     my_devops_feed
-      feed url: https://{organization}.pkgs.visualstudio.com/_packaging{feed}/maven/v1
+      url : https://{organization}.pkgs.visualstudio.com/_packaging{feed}/maven/v1
     ```
 
 ## Usage
