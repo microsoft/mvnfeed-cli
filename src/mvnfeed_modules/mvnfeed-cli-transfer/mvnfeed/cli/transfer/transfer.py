@@ -73,7 +73,11 @@ def _transfer_single_artifact(name, from_repository, to_repository, stage_dir, t
     if len(values) == 3:
         group_id = values[0]
         artifact_name = values[1]
-        artifact_type = 'jar'
+        # try to guess if we have a bom file
+        if '-bom' in artifact_name:
+            artifact_type = 'pom'
+        else:
+            artifact_type = 'jar'
         version = values[2]
         artifact_fullname = artifact_name + '-' + version
     elif len(values) == 4:
@@ -247,7 +251,7 @@ def _download_file(from_repository, path, filename, length=16*1024):
     if not URL in from_repository or not from_repository[URL]:
         raise ValueError('Repository missing url: ' + get_repository_shortname(from_repository))
 
-    url = from_repository[URL] + '/' + path
+    url = _append_url(from_repository[URL], path)
     logging.debug('downloading from %s', url)
     try:
         request = Request(url)
@@ -270,8 +274,8 @@ def _already_uploaded(to_repository, path):
     Return True if the file was already uploaded.
     """
     if not URL in to_repository or not to_repository[URL]:
-        raise ValueError('Repository missing url: ' + get_repository_shortname(to_repository))
-    url = to_repository[URL] + '/' + path
+        raise ValueError('Repository missing upload url: ' + get_repository_shortname(to_repository))
+    url = _append_url(to_repository[URL], path)
 
     if AUTHORIZATION in to_repository and to_repository[AUTHORIZATION]:
         logging.debug('authorization header added')
@@ -299,8 +303,8 @@ def _upload_file(to_repository, path, filename):
         return False
 
     if not URL in to_repository or not to_repository[URL]:
-        raise ValueError('Repository missing url: ' + get_repository_shortname(to_repository))
-    url = to_repository[URL] + '/' + path
+        raise ValueError('Repository missing upload url: ' + get_repository_shortname(to_repository))
+    url = _append_url(to_repository[URL], path)
 
     logging.debug('uploading to ' + url)
     if AUTHORIZATION in to_repository and to_repository[AUTHORIZATION]:
@@ -319,3 +323,7 @@ def _upload_file(to_repository, path, filename):
     except Exception as ex:
         logging.warn('exception while uploading %s', ex)
         return False
+
+
+def _append_url(base_url, fragment):
+    return base_url + fragment if base_url.endswith('/') else base_url + '/' + fragment

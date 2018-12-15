@@ -113,7 +113,7 @@ where:
 For example:
 
 ```file
-org.projectlombok:lombok:jar:1.18.2
+org.projectlombok:lombok:1.18.2
 com.microsoft.azure:azure-dependencies-bom:pom:1.0.0.M4
 org.elasticsearch:elasticsearch:test-jar:tests:2.4.4
 io.netty:netty-transport-native-epoll:jar:linux-x86_64:4.1.28.Final
@@ -131,19 +131,19 @@ io.netty:netty-transport-native-epoll:jar:linux-x86_64:4.1.28.Final
 
     this means that you will have to look at the given POM file and manually upload the skipped dependency, if necessary.
 
-* when BOM (Bill of Materials) files are missing, they can be transferred by defining a POM dependency: `[group_id]:[artifact_id]-bom:pom:[version]`
+* use the `:pom` type to explicitely transfer a BOM file (e.g. `com.microsoft.azure:azure-dependencies-bom:pom:1.0.0.M4`)
 
 ## Recommanded workflow
 
-Because you may encounter a _very_ large number of missing versions, it is advised to first list the exact dependencies that must be transferred:
+Because you may encounter a _very_ large number of missing versions, it is advised to first list the exact dependencies that must be transferred.
 
-1. create a Gradle/Maven project that only includes the desired dependencies;
+1. create a Gradle/Maven project that only includes the desired dependencies, with the only caveat that the Gradle/Maven is not using their respective caches;
 
 1. get the list of all transitive dependencies:
 
     ```bash
     # gradle
-    ./gradlew dependencies > dependencies.txt
+    ./gradlew --gradle-user-home . --debug dependencies > dependencies.txt
 
     # maven
     mvn dependency:list -DoutputFile=dependencies.txt

@@ -45,6 +45,8 @@ def _cleanup_maven(input, output):
 
 
 def _cleanup_gradle(input, output):
+    RESOLVE = 'Attempting to resolve component for '
+
     if not os.path.exists(input):
         raise ValueError('Input file doesn\'t exist')
 
@@ -53,12 +55,19 @@ def _cleanup_gradle(input, output):
         lines = file.readlines()
         for line in lines:
             line = line.strip().rstrip()
+            if RESOLVE in line:
+                start = line.find(RESOLVE) + len(RESOLVE)
+                end = line.find(' ', start)
+                packages.append(line[start:end])
+                continue
+
             if not '\--- ' in line and not '+--- ' in line:
                 # not a package line
                 continue
-            if ' -> ' in line or ' (*)' in line:
+            if ' -> ' in line or ' (*)' in line or ' (n)' in line:
                 # package was bumped somewhere else
                 continue
+
             packages.append(line[line.rfind(' ') + 1:])
 
     packages = list(set(packages))
