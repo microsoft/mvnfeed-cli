@@ -43,6 +43,7 @@ def add_repository(name, username, url=None):
     :param username: name of the user for the basic authentication to the repository
     :param url: url of the repository
     """
+    global upload_url, download_url
     if username is None:
         raise ValueError('Username must be defined')
     if upload_url is None and download_url is None:
