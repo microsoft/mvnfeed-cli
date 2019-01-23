@@ -45,8 +45,8 @@ def add_repository(name, username, url=None):
     """
     if username is None:
         raise ValueError('Username must be defined')
-    if upload_url is None and download_url is None:
-        raise ValueError('At least one of upload_url or download_url must be defined')
+    if url is None:
+        raise ValueError('Url must be defined')
 
     password = getpass.getpass()
     encoded = base64.b64encode((username + ':' + password).encode('utf-8'))
