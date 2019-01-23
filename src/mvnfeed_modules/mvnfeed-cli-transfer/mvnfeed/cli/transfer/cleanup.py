@@ -3,8 +3,8 @@
 # Licensed under the MIT License. See License.txt in the project root for license information.
 # --------------------------------------------------------------------------------------------
 
-import logging
 import os
+
 
 def cleanup_file(type, input, output):
     """
@@ -61,7 +61,7 @@ def _cleanup_gradle(input, output):
                 packages.append(line[start:end])
                 continue
 
-            if not '\--- ' in line and not '+--- ' in line:
+            if '\\--- ' not in line and '+--- ' not in line:
                 # not a package line
                 continue
             if ' -> ' in line or ' (*)' in line or ' (n)' in line:

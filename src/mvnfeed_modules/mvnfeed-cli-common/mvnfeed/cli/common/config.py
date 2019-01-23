@@ -13,11 +13,13 @@ REPOSITORY = 'repository.'
 URL = 'url'
 AUTHORIZATION = 'authorization'
 
+
 def _get_config_dir():
     codegen_config_dir = os.getenv('MVNFEED_CONFIG_DIR', None) or os.path.expanduser(os.path.join('~', '.mvnfeed'))
     if not os.path.exists(codegen_config_dir):
         os.makedirs(codegen_config_dir)
     return codegen_config_dir
+
 
 GLOBAL_CONFIG_DIR = _get_config_dir()
 

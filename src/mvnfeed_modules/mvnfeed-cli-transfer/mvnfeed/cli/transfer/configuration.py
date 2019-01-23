@@ -6,9 +6,10 @@
 import base64
 import getpass
 
-from mvnfeed.cli.common.config import REPOSITORY, AUTHORIZATION, URL, URL, repo_section_name, load_config, save_config
+from mvnfeed.cli.common.config import REPOSITORY, AUTHORIZATION, URL, repo_section_name, load_config, save_config
 
 STAGE_DIR_CONFIGNAME = 'stage_dir'
+
 
 def set_stagedir(path):
     """

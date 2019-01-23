@@ -98,7 +98,7 @@ def _transfer_single_artifact(name, from_repository, to_repository, stage_dir, t
 
     artifact_path = group_id.replace('.', '/') + '/' + artifact_name + '/' + version
 
-    if artifact_type in [ 'jar', 'war' ]:
+    if artifact_type in ['jar', 'war']:
         files2transfer = _java_artifacts(artifact_fullname, artifact_type, artifact_path, transfer_deps)
     else:
         files2transfer = _untyped_artifacts(artifact_fullname, artifact_type, artifact_path, transfer_deps)
@@ -117,7 +117,7 @@ def _transfer_single_artifact(name, from_repository, to_repository, stage_dir, t
         _download_file(from_repository, artifact_relativepath, outfile)
         if not os.path.exists(outfile):
             logging.info('%s was not downloaded. Skipping', outfile)
-            if file2transfer['target'] == True:
+            if file2transfer['target']:
                 logging.warning('%s was not found in the repository', file2transfer['name'])
             continue
 
@@ -134,8 +134,9 @@ def _transfer_single_artifact(name, from_repository, to_repository, stage_dir, t
                 parent_group_id = _findNodeValue(parentNode, 'groupId')
                 parent_artifact_id = _findNodeValue(parentNode, 'artifactId')
                 parent_version = _findNodeValue(parentNode, 'version')
+                parent_path = parent_group_id.replace('.', '/') + '/' + parent_artifact_id + '/' + parent_version
 
-                files2transfer.append(_pom_artifact(parent_artifact_id + '-' + parent_version, parent_group_id.replace('.', '/') + '/' + parent_artifact_id + '/' + parent_version))
+                files2transfer.append(_pom_artifact(parent_artifact_id + '-' + parent_version, parent_path))
 
             if 'transfer_deps' not in file2transfer or not file2transfer['transfer_deps']:
                 logging.info('not transferring dependencies from %s', file2transfer['name'])
@@ -162,13 +163,15 @@ def _transfer_single_artifact(name, from_repository, to_repository, stage_dir, t
                 # if no version has been defined, than it's getting potentially
                 # tricky so let's just give up and let the user deal with it
                 if dep_version is None:
-                    logging.error('missing explicit version for %s:%s in %s. Skipping', dep_group_id, dep_artifact_id, file2transfer['name'])
+                    logging.error('missing explicit version for %s:%s in %s. Skipping',
+                                  dep_group_id, dep_artifact_id, file2transfer['name'])
                     continue
 
                 # let's download the dependency
                 artifact_fullname = dep_artifact_id + '-' + dep_version
                 artifact_path = dep_group_id.replace('.', '/') + '/' + dep_artifact_id + '/' + dep_version
                 files2transfer.extend(_java_artifacts(artifact_fullname, 'jar', artifact_path, transfer_deps))
+
 
 # Definitions of the artifacts to download:
 #  - name: name of the artifact
@@ -248,7 +251,7 @@ def _download_file(from_repository, path, filename, length=16*1024):
     if os.path.exists(filename):
         logging.debug('%s already downloaded', filename)
 
-    if not URL in from_repository or not from_repository[URL]:
+    if URL not in from_repository or not from_repository[URL]:
         raise ValueError('Repository missing url: ' + get_repository_shortname(from_repository))
 
     url = _append_url(from_repository[URL], path)
@@ -273,16 +276,16 @@ def _already_uploaded(to_repository, path):
     """
     Return True if the file was already uploaded.
     """
-    if not URL in to_repository or not to_repository[URL]:
+    if URL not in to_repository or not to_repository[URL]:
         raise ValueError('Repository missing upload url: ' + get_repository_shortname(to_repository))
     url = _append_url(to_repository[URL], path)
 
     if AUTHORIZATION in to_repository and to_repository[AUTHORIZATION]:
         logging.debug('authorization header added')
-        headers = { 'Authorization': to_repository[AUTHORIZATION] }
+        headers = {'Authorization': to_repository[AUTHORIZATION]}
     else:
         logging.debug('no authorization configured')
-        headers = { }
+        headers = {}
 
     try:
         response = requests.head(url, headers=headers)
@@ -302,17 +305,17 @@ def _upload_file(to_repository, path, filename):
         logging.debug('missing file to upload, skipping %s', filename)
         return False
 
-    if not URL in to_repository or not to_repository[URL]:
+    if URL not in to_repository or not to_repository[URL]:
         raise ValueError('Repository missing upload url: ' + get_repository_shortname(to_repository))
     url = _append_url(to_repository[URL], path)
 
     logging.debug('uploading to ' + url)
     if AUTHORIZATION in to_repository and to_repository[AUTHORIZATION]:
         logging.debug('authorization header added')
-        headers = { 'Authorization': to_repository[AUTHORIZATION] }
+        headers = {'Authorization': to_repository[AUTHORIZATION]}
     else:
         logging.debug('no authorization configured')
-        headers = { }
+        headers = {}
 
     try:
         with open(filename, 'rb') as file:

@@ -3,8 +3,8 @@
 # Licensed under the MIT License. See License.txt in the project root for license information.
 # --------------------------------------------------------------------------------------------
 
-import knack
 from knack.commands import CommandGroup
+
 
 def load_transfer_commands(cli_command_loader):
     with CommandGroup(cli_command_loader, 'artifact', 'mvnfeed.cli.transfer.{}') as g:
