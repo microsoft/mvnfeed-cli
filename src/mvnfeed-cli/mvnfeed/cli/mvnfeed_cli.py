@@ -1,10 +1,6 @@
 from __future__ import print_function
 
-import platform
-import sys
-
 from knack import CLI
-from knack.events import EVENT_CLI_POST_EXECUTE, EVENT_CLI_PRE_EXECUTE
 from mvnfeed.cli.common.config import GLOBAL_CONFIG_DIR, CLI_ENV_VARIABLE_PREFIX, load_config
 from mvnfeed.cli.common.logmodule import init_logging
 from .mvnfeed_help import MvnFeedHelp
@@ -13,6 +9,7 @@ from .mvnfeed_commands import MvnFeedCommandsLoader
 CLI_NAME = "mvnfeed"
 CLI_PACKAGE_NAME = 'mvnfeed-cli'
 COMPONENT_PREFIX = 'mvnfeed-cli-'
+
 
 class MvnFeedCLI(CLI):
     def __init__(self):

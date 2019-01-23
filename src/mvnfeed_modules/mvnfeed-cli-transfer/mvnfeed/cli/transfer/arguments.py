@@ -5,6 +5,7 @@
 
 import knack
 
+
 def load_transfer_arguments(cli_command_loader):
     with knack.arguments.ArgumentsContext(cli_command_loader, 'config stage_dir') as ac:
         ac.argument('path', options_list=('--path'))

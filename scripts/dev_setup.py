@@ -9,6 +9,7 @@ import sys
 import os
 from subprocess import check_call, CalledProcessError
 
+
 def py_command(command):
     try:
         print('Executing: ' + sys.executable + ' ' + command)
@@ -18,8 +19,10 @@ def py_command(command):
         print(err, file=sys.stderr)
         sys.exit(1)
 
+
 def pip_command(command):
     py_command('-m pip ' + command)
+
 
 packages = []
 

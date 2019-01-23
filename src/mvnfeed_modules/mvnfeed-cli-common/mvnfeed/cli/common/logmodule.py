@@ -5,6 +5,7 @@
 
 import logging
 
+
 def init_logging(filepath, level=logging.DEBUG):
     """
     Initialize the logging module for the application.

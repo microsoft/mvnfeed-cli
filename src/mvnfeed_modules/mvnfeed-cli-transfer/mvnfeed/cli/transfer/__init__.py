@@ -6,10 +6,10 @@
 import pkg_resources
 pkg_resources.declare_namespace(__name__)
 
-import knack.help
 
 def load_params(_):
-    import knack.arguments
+    import knack.arguments  # noqa
+
 
 def load_commands():
-    import knack.commands
+    import knack.commands  # noqa
