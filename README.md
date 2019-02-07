@@ -47,8 +47,7 @@ The configuration file for the _MvnFeed CLI_ is stored in the file `~/.mvnfeed/m
     mvnfeed config repo add \
         --name my_devops_feed \
         --username my_username
-        --download_url https://{organization}.pkgs.visualstudio.com/_packaging/{feed}/maven/v1
-        --upload_url https://{organization}.pkgs.visualstudio.com/_packaging/{feed}/maven/v1
+        --url https://{organization}.pkgs.visualstudio.com/_packaging/{feed}/maven/v1
     ```
 
     **About authorization**: currently only basic auth is supported but if your repository supports other authentication means, edit the configuration file and directly modify the `authorization` value. This value will be passed unmodified in the Authorization HTTP header.
