@@ -319,7 +319,12 @@ def _upload_file(to_repository, path, filename):
 
     try:
         with open(filename, 'rb') as file:
-            response = requests.put(url, files={filename: file}, headers=headers)
+            if filename.endswith('.pom'):
+                # MODIF Laurent
+                payload = file.read()
+                response = requests.request("PUT", url, data=payload, headers=headers)
+            else:
+                response = requests.put(url, files={filename: file}, headers=headers)
             if not response.ok:
                 logging.error('error while uploading of %s: %s', path, response.text)
         return True
