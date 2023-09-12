@@ -6,7 +6,7 @@
 import base64
 import getpass
 
-from mvnfeed.cli.common.config import REPOSITORY, AUTHORIZATION, URL, repo_section_name, load_config, save_config
+from mvnfeed.cli.common.config import REPOSITORY, AUTHORIZATION, URL, AUTH_HEADER, AUTH_VALUE, repo_section_name, load_config, save_config
 
 STAGE_DIR_CONFIGNAME = 'stage_dir'
 
@@ -36,27 +36,32 @@ def view_stagedir():
     return config.get('general', STAGE_DIR_CONFIGNAME)
 
 
-def add_repository(name, username, url=None):
+def add_repository(name, username=None, url=None, auth_header=None, auth_value=None):
     """
     Adds an external Maven repository.
 
     :param name: internal name of the repository
     :param username: name of the user for the basic authentication to the repository
     :param url: url of the repository
+    :param auth_header: name of an auth header
+    :param auth_value: value in that auth header
     """
-    if username is None:
-        raise ValueError('Username must be defined')
     if url is None:
         raise ValueError('Url must be defined')
 
-    password = getpass.getpass()
-    encoded = base64.b64encode((username + ':' + password).encode('utf-8'))
-    authorization = 'Basic ' + encoded.decode('utf-8')
+    if username is not None:
+        password = getpass.getpass()
+        encoded = base64.b64encode((username + ':' + password).encode('utf-8'))
+        authorization = 'Basic ' + encoded.decode('utf-8')
+    else:
+        authorization = None
 
     config = load_config()
     config[repo_section_name(name)] = {
         URL: _default_value(url),
-        AUTHORIZATION: _default_value(authorization)
+        AUTHORIZATION: _default_value(authorization),
+        AUTH_HEADER: _default_value(auth_header),
+        AUTH_VALUE: _default_value(auth_value)
     }
     save_config(config)
 
