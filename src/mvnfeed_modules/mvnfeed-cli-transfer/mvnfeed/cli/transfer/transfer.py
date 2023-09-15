@@ -15,7 +15,7 @@ except ImportError:
     # Python 2
     from urllib2 import Request, urlopen
 from .configuration import get_repository, get_stagedir, get_repository_shortname
-from mvnfeed.cli.common.config import AUTHORIZATION, URL, load_config
+from mvnfeed.cli.common.config import AUTHORIZATION, URL, AUTH_HEADER, AUTH_VALUE, load_config
 
 
 def transfer_artifact(name, from_repo, to_repo, transfer_deps=False):
@@ -261,6 +261,9 @@ def _download_file(from_repository, path, filename, length=16*1024):
         if AUTHORIZATION in from_repository and from_repository[AUTHORIZATION]:
             logging.debug('authorization header added')
             request.add_header('Authorization', from_repository[AUTHORIZATION])
+        elif AUTH_HEADER in from_repository and from_repository[AUTH_HEADER]:
+            logging.debug('custom auth header added')
+            request.add_header(from_repository[AUTH_HEADER], from_repository[AUTH_VALUE])
         else:
             logging.debug('no authorization configured')
 
@@ -283,6 +286,9 @@ def _already_uploaded(to_repository, path):
     if AUTHORIZATION in to_repository and to_repository[AUTHORIZATION]:
         logging.debug('authorization header added')
         headers = {'Authorization': to_repository[AUTHORIZATION]}
+    elif AUTH_HEADER in to_repository and to_repository[AUTH_HEADER]:
+        logging.debug('custom auth header added')
+        headers = {to_repository[AUTH_HEADER]: to_repository[AUTH_VALUE]}
     else:
         logging.debug('no authorization configured')
         headers = {}
@@ -313,10 +319,12 @@ def _upload_file(to_repository, path, filename):
     if AUTHORIZATION in to_repository and to_repository[AUTHORIZATION]:
         logging.debug('authorization header added')
         headers = {'Authorization': to_repository[AUTHORIZATION]}
+    elif AUTH_HEADER in to_repository and to_repository[AUTH_HEADER]:
+        logging.debug('custom auth header added')
+        headers = {to_repository[AUTH_HEADER]: to_repository[AUTH_VALUE]}
     else:
         logging.debug('no authorization configured')
         headers = {}
-
     try:
         with open(filename, 'rb') as file:
             response = requests.put(url, data=file, headers=headers)
