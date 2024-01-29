@@ -12,6 +12,8 @@ CONFIG_FILENAME = 'mvnfeed.ini'
 REPOSITORY = 'repository.'
 URL = 'url'
 AUTHORIZATION = 'authorization'
+AUTH_HEADER = 'auth_header'
+AUTH_VALUE = 'auth_value'
 
 
 def _get_config_dir():
