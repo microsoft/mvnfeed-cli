@@ -319,7 +319,7 @@ def _upload_file(to_repository, path, filename):
 
     try:
         with open(filename, 'rb') as file:
-            response = requests.put(url, files={filename: file}, headers=headers)
+            response = requests.put(url, data=file, headers=headers)
             if not response.ok:
                 logging.error('error while uploading of %s: %s', path, response.text)
         return True
